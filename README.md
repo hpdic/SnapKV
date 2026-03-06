@@ -10,7 +10,15 @@ conda activate snapkv
 pip install torch torchvision torchaudio
 pip install transformers==4.37.0
 pip install flash-attn==2.4.0.post1 --no-build-isolation # Taking a LOT of time, be patient
+pip install accelerate
+pip install datasets==2.15.0
 pip install -e .
+cd experiments/LongBench
+CUDA_VISIBLE_DEVICES=0 python pred_snap.py --model mistral-7B-instruct-v0.2 --compress_args_path ablation_c2048_w32_k7_maxpool.json
+pip install jieba fuzzywuzzy python-Levenshtein rouge
+mkdir -p H2O/results/mistral-7B-instruct-v0.2ablation_c2048_w32_k7_maxpool
+python eval.py --model mistral-7B-instruct-v0.2ablation_c2048_w32_k7_maxpool
+cat H2O/results/mistral-7B-instruct-v0.2ablation_c2048_w32_k7_maxpool/result.json
 ```
 
 # SnapKV :camera:
