@@ -1,3 +1,18 @@
+# HPDIC MOD
+
+## Update on March 6, 2026, GPU: A100 80GB
+```bash
+cd ~/hpdic
+git clone git@github.com:FasterDecoding/SnapKV.git
+cd SnapKV
+conda create -n snapkv python=3.10 -y
+conda activate snapkv
+pip install torch torchvision torchaudio
+pip install transformers==4.37.0
+pip install flash-attn==2.4.0.post1 --no-build-isolation # Taking a LOT of time, be patient
+pip install -e .
+```
+
 # SnapKV :camera:
 We introduce an innovative and out-of-box KV cache compression method, [SnapKV](https://arxiv.org/abs/2404.14469).
 ## Requirements
