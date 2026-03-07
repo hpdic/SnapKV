@@ -1,6 +1,6 @@
 # HPDIC MOD
 
-## Update on March 6, 2026, GPU: A100 80GB
+## Vanilla SnapKV deployment on March 6, 2026, GPU: A100 80GB
 ```bash
 cd ~/hpdic
 git clone git@github.com:FasterDecoding/SnapKV.git
@@ -19,6 +19,12 @@ pip install jieba fuzzywuzzy python-Levenshtein rouge
 mkdir -p H2O/results/mistral-7B-instruct-v0.2ablation_c2048_w32_k7_maxpool
 python eval.py --model mistral-7B-instruct-v0.2ablation_c2048_w32_k7_maxpool
 cat H2O/results/mistral-7B-instruct-v0.2ablation_c2048_w32_k7_maxpool/result.json
+
+# More tests
+CUDA_VISIBLE_DEVICES=0 python pred_snap.py --model mistral-7B-instruct-v0.2 --compress_args_path ablation_c1024_w32_k7_maxpool.json
+mkdir -p H2O/results/mistral-7B-instruct-v0.2ablation_c1024_w32_k7_maxpool
+python eval.py --model mistral-7B-instruct-v0.2ablation_c1024_w32_k7_maxpool
+cat H2O/results/mistral-7B-instruct-v0.2ablation_c1024_w32_k7_maxpool/result.json
 ```
 
 # SnapKV :camera:

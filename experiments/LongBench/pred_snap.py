@@ -1,4 +1,5 @@
 import os
+from time import time
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from datasets import load_dataset
 import json
@@ -115,6 +116,11 @@ def get_pred_single_gpu(data, max_length, max_gen,
         if not printed:
             print(prompt)
             printed = True
+            
+        torch.cuda.synchronize()
+        torch.cuda.reset_peak_memory_stats()
+        start_time = time()
+
         if dataset == "samsum": # prevent illegal output on samsum (model endlessly repeat "\nDialogue"), might be a prompting issue
             output = model.generate(
                 **input,
@@ -134,6 +140,13 @@ def get_pred_single_gpu(data, max_length, max_gen,
                 temperature=1.0,
                 min_length=context_length+1,
             )[0]
+            
+        torch.cuda.synchronize()
+        end_time = time()
+        max_vram_mb = torch.cuda.max_memory_allocated() / (1024 * 1024)   
+        
+        print(f'context length: {context_length}, inference time: {end_time - start_time:.2f} seconds, peak VRAM: {max_vram_mb:.2f} MB') 
+            
         pred = tokenizer.decode(output[context_length:], skip_special_tokens=True)
         pred = post_process(pred, model_name)
         with open(out_path, "a", encoding="utf-8") as f:
